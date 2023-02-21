@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "533217486566",
+    "project_id": "cookhelper-fa428",
+    "storage_bucket": "cookhelper-fa428.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533217486566:android:50adcc41399936351e7d27",
+        "android_client_info": {
+          "package_name": "com.example.cook_helper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533217486566-4vs2se8mlnbbuloheob71e3iknng30sn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLkgNB9GdKMFVpOLCJ-_6vaAoZSjl0kao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533217486566-4vs2se8mlnbbuloheob71e3iknng30sn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
