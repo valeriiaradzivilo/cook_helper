@@ -4,9 +4,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-void main() {
+import 'authentification/firebase_options.dart';
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  // Firebase.initializeApp();
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      name: 'CookHelper',
+      options: DefaultFirebaseOptions.currentPlatform,
+    ).whenComplete(() {
+      print("completedAppInitialize");
+    });
+
+  }
   runApp(const MyApp());
 
 }

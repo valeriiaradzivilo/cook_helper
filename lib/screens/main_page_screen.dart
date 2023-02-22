@@ -1,7 +1,11 @@
+import 'package:cook_helper/recipes_work/getRecipes.dart';
 import 'package:cook_helper/widgets/small_recipe.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
+import '../authentification/auth.dart';
+import '../recipes_work/recipe.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -12,12 +16,30 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   Color backColor = Color(0xFF9FB4E7);
+  List<Recipe> recipesList = [];
+  RecipesList recipeDatabaseWork = RecipesList();
+  bool recipeUploaded = false;
+  Future <void>recipeGetter() async{
+    AuthService authService = AuthService();
+    await authService.signInAnon();
+    recipesList = await recipeDatabaseWork.getRecipes();
+    setState(() {
+      recipeUploaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    recipeGetter();
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backColor,
       appBar: AppBar(
-        title: Text("Cookbook Helper"),
+        title: const Text("Cookbook Helper"),
         centerTitle: true,
         backgroundColor: backColor,
         elevation: 0.2,
@@ -26,30 +48,37 @@ class _MainPageState extends State<MainPage> {
               icon: const Icon(Icons.person_outline))
         ],
       ),
-      body: SafeArea(
-        child:
-            Align(
-              alignment: Alignment.center,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 10.w,
-                    height: 60.h,
-                    color: Color(0xFFD0AB9C),
-                  ),
-                  SmallRecipe(),
-                  Container(
-                    width: 10.w,
-                    height: 60.h,
-                    color: Color(0xFFD0AB9C),
-                  ),
-                ],
+      body: Visibility(
+        visible: recipeUploaded,
+        replacement: const Align(
+            alignment: Alignment.center,
+            child: CircularProgressIndicator()),
+        child: SafeArea(
+          child:
+              Align(
+                alignment: Alignment.center,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 10.w,
+                      height: 60.h,
+                      color: Color(0xFFD0AB9C),
+                    ),
+                    recipeUploaded?SmallRecipe(recipe: recipesList.elementAt(0),):
+                    SizedBox(),
+                    Container(
+                      width: 10.w,
+                      height: 60.h,
+                      color: Color(0xFFD0AB9C),
+                    ),
+                  ],
+                ),
               ),
-            ),
 
 
+        ),
       ),
     );
   }
