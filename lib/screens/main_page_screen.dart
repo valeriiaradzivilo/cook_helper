@@ -1,12 +1,9 @@
-import 'dart:ffi';
-
 import 'package:cook_helper/recipes_work/getRecipes.dart';
 import 'package:cook_helper/widgets/small_recipe.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../authentification/auth.dart';
+import '../authentication/auth.dart';
 import '../recipes_work/recipe.dart';
 
 class MainPage extends StatefulWidget {
@@ -18,7 +15,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
-  Color backColor = Color(0xFF9FB4E7);
+  Color backColor = const Color(0xFF9FB4E7);
   List<Recipe> recipesList = [];
   RecipesList recipeDatabaseWork = RecipesList();
   bool recipeUploaded = false;
@@ -64,37 +61,39 @@ class _MainPageState extends State<MainPage> {
                 Container(
                   width: 10.w,
                   height: 60.h,
-                  color: Color(0xFFD0AB9C),
+                  color: const Color(0xFFD0AB9C),
                 ),
                 recipeUploaded
                     ? Dismissible(
-                    resizeDuration: const Duration(milliseconds: 10),
-                    onDismissed: (DismissDirection direction) {
-                      setState(() {
-                        if (currentIndex + 1 < recipesList.length &&
-                            (currentIndex - 1 >= 0)) {
-                          currentIndex +=
-                          direction == DismissDirection.endToStart ? 1 : -1;
-                        }
-                        else if (currentIndex == 0) {
-
-                          direction==DismissDirection.endToStart? currentIndex +=1 : currentIndex +=recipesList.length - 1;
-                        } else if (currentIndex == recipesList.length - 1) {
-                          direction == DismissDirection.endToStart
-                              ? currentIndex +=-recipesList.length + 1
-                              : currentIndex -=1;
-                        }
-                      });
-                    },
+                        resizeDuration: const Duration(milliseconds: 10),
+                        onDismissed: (DismissDirection direction) {
+                          setState(() {
+                            if (currentIndex + 1 < recipesList.length &&
+                                (currentIndex - 1 >= 0)) {
+                              currentIndex +=
+                                  direction == DismissDirection.endToStart
+                                      ? 1
+                                      : -1;
+                            } else if (currentIndex == 0) {
+                              direction == DismissDirection.endToStart
+                                  ? currentIndex += 1
+                                  : currentIndex += recipesList.length - 1;
+                            } else if (currentIndex == recipesList.length - 1) {
+                              direction == DismissDirection.endToStart
+                                  ? currentIndex += -recipesList.length + 1
+                                  : currentIndex -= 1;
+                            }
+                          });
+                        },
                         key: ValueKey(currentIndex),
                         child: SmallRecipe(
                           recipe: recipesList.elementAt(currentIndex),
                         ))
-                    : SizedBox(),
+                    : const SizedBox(),
                 Container(
                   width: 10.w,
                   height: 60.h,
-                  color: Color(0xFFD0AB9C),
+                  color: const Color(0xFFD0AB9C),
                 ),
               ],
             ),

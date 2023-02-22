@@ -23,7 +23,7 @@ class RecipesList {
       final imageRef = storage.ref().child('recipe_pictures/${document.id}.jpg');
       // Get the download URL of the image file
       final downloadUrl = await imageRef.getDownloadURL();
-      recipesList.add(Recipe(data['name'], data['description'],
+      recipesList.add(Recipe(document.id,data['name'], data['description'],
           data['ingredients'], data['steps'], downloadUrl,false));
     }
     return recipesList;

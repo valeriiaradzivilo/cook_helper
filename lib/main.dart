@@ -1,11 +1,12 @@
-import 'package:cook_helper/authentification/login_screen.dart';
+import 'package:cook_helper/authentication/login_screen.dart';
+import 'package:cook_helper/screens/create_recipe_screen.dart';
 import 'package:cook_helper/screens/main_page_screen.dart';
 import 'package:cook_helper/screens/open_recipe_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import 'authentification/firebase_options.dart';
+import 'authentication/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.lightBlue,
           ),
         routes: {
-            '/':(context) => MainPage(),
+            '/':(context) => CreateRecipeScreen(),
             '/openRecipe':(context)=>OpenRecipeScreen(),
         },
         );
