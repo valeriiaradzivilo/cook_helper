@@ -1,4 +1,6 @@
 import 'package:cook_helper/screens/open_recipe_screen.dart';
+import 'package:cook_helper/widgets/text_widgets/SmallText.dart';
+import 'package:cook_helper/widgets/text_widgets/main_text_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -25,10 +27,7 @@ class _SmallRecipeState extends State<SmallRecipe> {
         padding: const EdgeInsets.all(20.0),
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          Text(
-            widget.recipe.name,
-            style: TextStyle(fontSize: 5.h),
-          ),
+          MainText(text: widget.recipe.name),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
@@ -38,12 +37,7 @@ class _SmallRecipeState extends State<SmallRecipe> {
               ),
             ),
           ),
-          Expanded(
-              child: Text(
-            widget.recipe.description,
-            maxLines: 5,
-            overflow: TextOverflow.ellipsis,
-          )),
+          SmallText(text:widget.recipe.description),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
