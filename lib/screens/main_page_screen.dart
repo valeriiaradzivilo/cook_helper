@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cook_helper/recipes_work/getRecipes.dart';
 import 'package:cook_helper/widgets/small_recipe.dart';
 import 'package:flutter/cupertino.dart';
@@ -66,7 +68,7 @@ class _MainPageState extends State<MainPage> {
                 ),
                 recipeUploaded
                     ? Dismissible(
-                    resizeDuration: null,
+                    resizeDuration: const Duration(milliseconds: 10),
                     onDismissed: (DismissDirection direction) {
                       setState(() {
                         if (currentIndex + 1 < recipesList.length &&
@@ -74,15 +76,14 @@ class _MainPageState extends State<MainPage> {
                           currentIndex +=
                           direction == DismissDirection.endToStart ? 1 : -1;
                         }
-                        // else if (currentIndex == 0) {
-                        //   currentIndex += direction == DismissDirection.endToStart
-                        //       ? 1
-                        //       : listOfAllLists.length - 1;
-                        // } else if (currentIndex == listOfAllLists.length - 1) {
-                        //   currentIndex += direction == DismissDirection.endToStart
-                        //       ? -listOfAllLists.length + 1
-                        //       : -1;
-                        // }
+                        else if (currentIndex == 0) {
+
+                          direction==DismissDirection.endToStart? currentIndex +=1 : currentIndex +=recipesList.length - 1;
+                        } else if (currentIndex == recipesList.length - 1) {
+                          direction == DismissDirection.endToStart
+                              ? currentIndex +=-recipesList.length + 1
+                              : currentIndex -=1;
+                        }
                       });
                     },
                         key: ValueKey(currentIndex),
