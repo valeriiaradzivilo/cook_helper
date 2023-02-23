@@ -15,11 +15,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  int currentIndex = 0;
   Color backColor = Color(0xFF9FB4E7);
   List<Recipe> recipesList = [];
   RecipesList recipeDatabaseWork = RecipesList();
   bool recipeUploaded = false;
-  Future <void>recipeGetter() async{
+  Future<void> recipeGetter() async {
     AuthService authService = AuthService();
     await authService.signInAnon();
     recipesList = await recipeDatabaseWork.getRecipes();
@@ -32,8 +33,8 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     recipeGetter();
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,40 +45,59 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: backColor,
         elevation: 0.2,
         actions: [
-          IconButton(onPressed: () {},
-              icon: const Icon(Icons.person_outline))
+          IconButton(onPressed: () {}, icon: const Icon(Icons.person_outline))
         ],
       ),
       body: Visibility(
         visible: recipeUploaded,
         replacement: const Align(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator()),
+            alignment: Alignment.center, child: CircularProgressIndicator()),
         child: SafeArea(
-          child:
-              Align(
-                alignment: Alignment.center,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 10.w,
-                      height: 60.h,
-                      color: Color(0xFFD0AB9C),
-                    ),
-                    recipeUploaded?SmallRecipe(recipe: recipesList.elementAt(0),):
-                    SizedBox(),
-                    Container(
-                      width: 10.w,
-                      height: 60.h,
-                      color: Color(0xFFD0AB9C),
-                    ),
-                  ],
+          child: Align(
+            alignment: Alignment.center,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 10.w,
+                  height: 60.h,
+                  color: Color(0xFFD0AB9C),
                 ),
-              ),
-
-
+                recipeUploaded
+                    ? Dismissible(
+                    resizeDuration: null,
+                    onDismissed: (DismissDirection direction) {
+                      setState(() {
+                        if (currentIndex + 1 < recipesList.length &&
+                            (currentIndex - 1 >= 0)) {
+                          currentIndex +=
+                          direction == DismissDirection.endToStart ? 1 : -1;
+                        }
+                        // else if (currentIndex == 0) {
+                        //   currentIndex += direction == DismissDirection.endToStart
+                        //       ? 1
+                        //       : listOfAllLists.length - 1;
+                        // } else if (currentIndex == listOfAllLists.length - 1) {
+                        //   currentIndex += direction == DismissDirection.endToStart
+                        //       ? -listOfAllLists.length + 1
+                        //       : -1;
+                        // }
+                      });
+                    },
+                        key: ValueKey(currentIndex),
+                        child: SmallRecipe(
+                          recipe: recipesList.elementAt(currentIndex),
+                        ))
+                    : SizedBox(),
+                Container(
+                  width: 10.w,
+                  height: 60.h,
+                  color: Color(0xFFD0AB9C),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

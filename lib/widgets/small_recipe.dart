@@ -1,3 +1,4 @@
+import 'package:cook_helper/screens/open_recipe_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -16,6 +17,7 @@ class _SmallRecipeState extends State<SmallRecipe> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(10),
       height: 70.h,
       width: 70.w,
       color: Color(0xFFFEF5EF),
@@ -27,10 +29,13 @@ class _SmallRecipeState extends State<SmallRecipe> {
             widget.recipe.name,
             style: TextStyle(fontSize: 5.h),
           ),
-          Container(
-            height: 30.h,
-            child: Image.network(
-              widget.recipe.imageUrl,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 30.h,
+              child: Image.network(
+                widget.recipe.imageUrl,
+              ),
             ),
           ),
           Expanded(
@@ -44,7 +49,9 @@ class _SmallRecipeState extends State<SmallRecipe> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, OpenRecipeScreen.routeName, arguments: widget.recipe);
+                },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFE4BB97)),
                 icon: Icon(Icons.open_in_new),
@@ -62,7 +69,7 @@ class _SmallRecipeState extends State<SmallRecipe> {
                 iconSize: 40,
                 icon: Icon(
                   CupertinoIcons.heart,
-                  color: widget.recipe.isLiked ? Color(0xFF9D5C63) : null,
+                  color: widget.recipe.isLiked ? const Color(0xFF9D5C63) : null,
                 ),
               ),
             ],
