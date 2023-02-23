@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.lightBlue,
           ),
         routes: {
-            '/':(context) => CreateRecipeScreen(),
+            '/':(context) => MainPage(),
             '/openRecipe':(context)=>OpenRecipeScreen(),
         },
         );
