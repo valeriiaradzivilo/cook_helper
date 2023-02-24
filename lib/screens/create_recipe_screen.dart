@@ -102,6 +102,26 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                     icon: const Icon(Icons.add),
                     label: const Text("Add ingredient")),
 
+                //TODO: clean your code here to avoid repeats
+                DescriptionText(text:"Steps"),
+                for(int i =0; i< stepsControllers.length;i++)
+                  TextFormField(
+                    controller: stepsControllers.elementAt(i),
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: "Step ${i+1}",
+                    ),
+                  ),
+                ElevatedButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        stepsControllers.add(TextEditingController());
+                      });
+
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text("Add step")),
+
                 ElevatedButton.icon(
                     onPressed: () {
                       // uploadImageToFirebase(currentRecipe.imageUrl);
