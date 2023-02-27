@@ -9,7 +9,8 @@ class MainText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(text, style: TextStyle(fontSize: 5.h),),
+      child: Text(text, style: TextStyle(fontSize: 5.h-(text.length/3)),
+      textAlign: TextAlign.center,),
     );
   }
 }

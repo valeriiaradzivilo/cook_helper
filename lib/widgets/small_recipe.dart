@@ -1,3 +1,4 @@
+import 'package:cook_helper/additional_classes/color_palette.dart';
 import 'package:cook_helper/screens/open_recipe_screen.dart';
 import 'package:cook_helper/widgets/text_widgets/SmallText.dart';
 import 'package:cook_helper/widgets/text_widgets/main_text_widget.dart';
@@ -16,13 +17,14 @@ class SmallRecipe extends StatefulWidget {
 }
 
 class _SmallRecipeState extends State<SmallRecipe> {
+  ColorPalette colorPalette = ColorPalette();
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       height: 70.h,
       width: 70.w,
-      color: Color(0xFFFEF5EF),
+      color: colorPalette.lightWhite,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child:
@@ -37,17 +39,18 @@ class _SmallRecipeState extends State<SmallRecipe> {
               ),
             ),
           ),
-          SmallText(text:widget.recipe.description),
+          SmallText(text: widget.recipe.description),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, OpenRecipeScreen.routeName, arguments: widget.recipe);
+                  Navigator.pushNamed(context, OpenRecipeScreen.routeName,
+                      arguments: widget.recipe);
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFE4BB97)),
+                    backgroundColor: colorPalette.lightOrange),
                 icon: Icon(Icons.open_in_new),
                 label: Text(
                   "Open",
@@ -63,7 +66,7 @@ class _SmallRecipeState extends State<SmallRecipe> {
                 iconSize: 40,
                 icon: Icon(
                   CupertinoIcons.heart,
-                  color: widget.recipe.isLiked ? const Color(0xFF9D5C63) : null,
+                  color: widget.recipe.isLiked ? colorPalette.bordo : null,
                 ),
               ),
             ],

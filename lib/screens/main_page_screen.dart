@@ -1,3 +1,4 @@
+import 'package:cook_helper/additional_classes/color_palette.dart';
 import 'package:cook_helper/recipes_work/getRecipes.dart';
 import 'package:cook_helper/widgets/small_recipe.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  ColorPalette colorPalette = ColorPalette();
   int currentIndex = 0;
-  Color backColor = const Color(0xFF9FB4E7);
   List<Recipe> recipesList = [];
   RecipesList recipeDatabaseWork = RecipesList();
   bool recipeUploaded = false;
@@ -37,11 +38,11 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backColor,
+      backgroundColor: colorPalette.lightBlue,
       appBar: AppBar(
         title: const Text("Cookbook Helper"),
         centerTitle: true,
-        backgroundColor: backColor,
+        backgroundColor: colorPalette.lightBlue,
         elevation: 0.2,
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.person_outline))
@@ -61,7 +62,7 @@ class _MainPageState extends State<MainPage> {
                 Container(
                   width: 10.w,
                   height: 60.h,
-                  color: const Color(0xFFD0AB9C),
+                  color: colorPalette.lightWhite,
                 ),
                 recipeUploaded
                     ? Dismissible(
@@ -93,7 +94,7 @@ class _MainPageState extends State<MainPage> {
                 Container(
                   width: 10.w,
                   height: 60.h,
-                  color: const Color(0xFFD0AB9C),
+                  color: colorPalette.lightOrange,
                 ),
               ],
             ),

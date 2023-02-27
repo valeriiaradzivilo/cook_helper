@@ -1,9 +1,8 @@
 import 'dart:math';
 
+import 'package:cook_helper/additional_classes/color_palette.dart';
 import 'package:cook_helper/widgets/image_picker.dart';
 import 'package:cook_helper/widgets/text_widgets/decription_text.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../recipes_work/recipe.dart';
@@ -19,13 +18,13 @@ class CreateRecipeScreen extends StatefulWidget {
 class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  Recipe currentRecipe = Recipe("","", "", [], [], "", false);
+  Recipe currentRecipe = Recipe("", "", "", [], [], "", false);
   List<dynamic> steps = [];
   List<dynamic> ingredients = [];
   List<TextEditingController> stepsControllers = [];
   List<TextEditingController> ingredientsControllers = [];
   List<TextEditingController> ingredientsAmountControllers = [];
-
+  ColorPalette colorPalette = ColorPalette();
 
   String generateRandomId() {
     var r = Random();
@@ -36,12 +35,49 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
     return '${DateTime.now().millisecondsSinceEpoch}$charsList';
   }
 
-
-
   @override
   void initState() {
     currentRecipe.id = generateRandomId();
     super.initState();
+  }
+
+  void addFieldFunc(List<List<TextEditingController>> controllers) {
+    setState(() {
+      for (int i = 0; i < controllers.length; i++) {
+        controllers.elementAt(i).add(TextEditingController());
+      }
+    });
+  }
+
+  bool checkForFullControllers(List<TextEditingController> controllers)
+  {
+    for(int i =0; i<controllers.length;i++)
+      {
+        if(controllers.elementAt(i).text.isEmpty) {
+          return false;
+        }
+      }
+
+    return true;
+  }
+
+  Widget okButton(){
+    return TextButton(
+      child: const Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  AlertDialog alert() {
+    return AlertDialog(
+      title: const Text("Error"),
+      content: const Text("You didn't fill all the fields"),
+      actions: [
+        okButton(),
+      ],
+    );
   }
 
   @override
@@ -54,7 +90,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
           child: SafeArea(
             child: Column(
               children: [
-                DescriptionText(text:"Name"),
+                const MainText(text: "Create your personal recipe"),
+                const DescriptionText(text: "Name"),
                 TextFormField(
                   controller: nameController,
                   decoration: const InputDecoration(
@@ -65,7 +102,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                 ImagePicker(
                   currentRecipe: currentRecipe,
                 ),
-                DescriptionText(text:"Description"),
+                const DescriptionText(text: "Description"),
                 TextFormField(
                   controller: descriptionController,
                   decoration: const InputDecoration(
@@ -73,90 +110,105 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                     labelText: "Description",
                   ),
                 ),
-                DescriptionText(text:"Ingredients"),
-                for(int i =0; i< ingredientsControllers.length;i++)
+                const DescriptionText(text: "Ingredients"),
+                for (int i = 0; i < ingredientsControllers.length; i++)
                   Row(
                     children: [
                       Expanded(
                         child: TextFormField(
                           controller: ingredientsAmountControllers.elementAt(i),
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: UnderlineInputBorder(),
                             labelText: "Amount of ",
                           ),
                         ),
                       ),
-                      SizedBox(width: 10,),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       Expanded(
                         child: TextFormField(
                           controller: ingredientsControllers.elementAt(i),
                           decoration: InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: "Ingredient ${i+1}",
+                            border: const UnderlineInputBorder(),
+                            labelText: "Ingredient ${i + 1}",
                           ),
                         ),
                       ),
                     ],
                   ),
-                ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        ingredientsControllers.add(TextEditingController());
-                        ingredientsAmountControllers.add(TextEditingController());
-                      });
 
-                    },
+                ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorPalette.lightOrange,
+                    ),
+                    onPressed: () => addFieldFunc(
+                        [ingredientsAmountControllers, ingredientsControllers]),
                     icon: const Icon(Icons.add),
                     label: const Text("Add ingredient")),
 
                 //TODO: clean your code here to avoid repeats
-                DescriptionText(text:"Steps"),
-                for(int i =0; i< stepsControllers.length;i++)
+                const DescriptionText(text: "Steps"),
+                for (int i = 0; i < stepsControllers.length; i++)
                   TextFormField(
                     controller: stepsControllers.elementAt(i),
                     decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: "Step ${i+1}",
+                      border: const UnderlineInputBorder(),
+                      labelText: "Step ${i + 1}",
                     ),
                   ),
                 ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        stepsControllers.add(TextEditingController());
-                      });
-
-                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorPalette.lightOrange,
+                    ),
+                    onPressed: () => addFieldFunc(
+                        [stepsControllers]),
                     icon: const Icon(Icons.add),
                     label: const Text("Add step")),
 
                 ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorPalette.bordo,
+                    ),
                     onPressed: () {
-                      print(currentRecipe.toString());
-                      if(ingredientsControllers.isNotEmpty&&stepsControllers.isNotEmpty
-                      &&currentRecipe.imageUrl!=null) {
+                      if (ingredientsControllers.isNotEmpty &&
+                          stepsControllers.isNotEmpty &&
+                          currentRecipe.imageUrl != null
+                      && checkForFullControllers(ingredientsControllers)
+                      && checkForFullControllers(ingredientsAmountControllers)
+                      && checkForFullControllers(stepsControllers)
+                      ) {
                         setState(() {
                           currentRecipe.name = nameController.text;
                           currentRecipe.description =
                               descriptionController.text;
-                          for (int i =0; i<ingredientsControllers.length;i++) {
-                            var ingr = new Map();
-                            ingr['amount'] = double.parse(ingredientsAmountControllers.elementAt(i).text);
-                            ingr['item'] = ingredientsControllers.elementAt(i).text;
+                          for (int i = 0;
+                              i < ingredientsControllers.length;
+                              i++) {
+                            var ingr = {};
+                            ingr['amount'] = double.parse(
+                                ingredientsAmountControllers.elementAt(i).text);
+                            ingr['item'] =
+                                ingredientsControllers.elementAt(i).text;
                             currentRecipe.ingredients.add(ingr);
                           }
                           for (TextEditingController t in stepsControllers) {
                             currentRecipe.steps.add(t.text);
                           }
-                          currentRecipe.uploadFileImageToFirebase(currentRecipe
-                              .imageUrl);
+                          currentRecipe.uploadFileImageToFirebase(
+                              currentRecipe.imageUrl);
                           currentRecipe.addRecipeToFirestore();
                         });
-                      }
-                      else{
+                      } else {
                         print("You didn't fill all the fields");
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert();
+                          },
+                        );
+
                       }
-
-
                     },
                     icon: const Icon(Icons.save_alt),
                     label: const Text("Save recipe"))
