@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
+
 class Recipe{
   String id;
   String name;
@@ -18,6 +22,41 @@ class Recipe{
   void setLike(bool like)
   {
     isLiked = like;
+  }
+
+
+  Future<String> uploadFileImageToFirebase(File imageFile) async {
+    // Reference to the storage location where the image will be uploaded
+    Reference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('recipe_pictures/$id.jpg');
+
+    // Upload the image to Firebase Storage
+    UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
+    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+
+    // Get the URL of the uploaded image
+    String imageUrl = await taskSnapshot.ref.getDownloadURL();
+    this.imageUrl = imageUrl;
+
+    return imageUrl;
+  }
+
+  Future<void> addRecipeToFirestore() async {
+    // Get a reference to the Firestore collection where the recipe will be stored
+    CollectionReference recipesRef = FirebaseFirestore.instance.collection('recipes');
+
+    // Add the recipe data to the Firestore collection
+    await recipesRef.doc(id).set({
+      'name':name,
+      'description':description,
+      'ingredients':ingredients,
+      'steps':steps
+    });
+  }
+
+  String toString()
+  {
+    return "$id $name $description ${ingredients.toString()} ${steps.toString()}";
   }
 
 

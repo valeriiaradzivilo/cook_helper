@@ -24,6 +24,9 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   List<dynamic> ingredients = [];
   List<TextEditingController> stepsControllers = [];
   List<TextEditingController> ingredientsControllers = [];
+  List<TextEditingController> ingredientsAmountControllers = [];
+
+
   String generateRandomId() {
     var r = Random();
     const _chars =
@@ -33,20 +36,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
     return '${DateTime.now().millisecondsSinceEpoch}$charsList';
   }
 
-  Future<String> uploadImageToFirebase(File imageFile) async {
-    // Reference to the storage location where the image will be uploaded
-    Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('recipe_pictures/${currentRecipe.id}');
 
-    // Upload the image to Firebase Storage
-    UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
-    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
-
-    // Get the URL of the uploaded image
-    String imageUrl = await taskSnapshot.ref.getDownloadURL();
-
-    return imageUrl;
-  }
 
   @override
   void initState() {
@@ -85,17 +75,34 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                 ),
                 DescriptionText(text:"Ingredients"),
                 for(int i =0; i< ingredientsControllers.length;i++)
-                  TextFormField(
-                    controller: ingredientsControllers.elementAt(i),
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: "Ingredient ${i+1}",
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: ingredientsAmountControllers.elementAt(i),
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(),
+                            labelText: "Amount of ",
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Expanded(
+                        child: TextFormField(
+                          controller: ingredientsControllers.elementAt(i),
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(),
+                            labelText: "Ingredient ${i+1}",
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ElevatedButton.icon(
                     onPressed: () {
                       setState(() {
                         ingredientsControllers.add(TextEditingController());
+                        ingredientsAmountControllers.add(TextEditingController());
                       });
 
                     },
@@ -124,7 +131,32 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
                 ElevatedButton.icon(
                     onPressed: () {
-                      // uploadImageToFirebase(currentRecipe.imageUrl);
+                      print(currentRecipe.toString());
+                      if(ingredientsControllers.isNotEmpty&&stepsControllers.isNotEmpty
+                      &&currentRecipe.imageUrl!=null) {
+                        setState(() {
+                          currentRecipe.name = nameController.text;
+                          currentRecipe.description =
+                              descriptionController.text;
+                          for (int i =0; i<ingredientsControllers.length;i++) {
+                            var ingr = new Map();
+                            ingr['amount'] = double.parse(ingredientsAmountControllers.elementAt(i).text);
+                            ingr['item'] = ingredientsControllers.elementAt(i).text;
+                            currentRecipe.ingredients.add(ingr);
+                          }
+                          for (TextEditingController t in stepsControllers) {
+                            currentRecipe.steps.add(t.text);
+                          }
+                          currentRecipe.uploadFileImageToFirebase(currentRecipe
+                              .imageUrl);
+                          currentRecipe.addRecipeToFirestore();
+                        });
+                      }
+                      else{
+                        print("You didn't fill all the fields");
+                      }
+
+
                     },
                     icon: const Icon(Icons.save_alt),
                     label: const Text("Save recipe"))
