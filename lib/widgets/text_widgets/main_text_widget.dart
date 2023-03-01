@@ -7,10 +7,15 @@ class MainText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(text, style: TextStyle(fontSize: 5.h-(text.length/3)),
-      textAlign: TextAlign.center,),
+    return SizedBox(
+        width: 60.w,
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 5.h - (text.length / 3)),
+          textAlign: TextAlign.center,
+          maxLines: 100,
+        ),
+
     );
   }
 }

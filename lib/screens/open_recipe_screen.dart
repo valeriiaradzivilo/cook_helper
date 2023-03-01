@@ -49,7 +49,7 @@ class _OpenRecipeScreenState extends State<OpenRecipeScreen> {
                     child: Image.network(currentRecipe.imageUrl)),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     MainText(text: currentRecipe.name),
                     IconButton(

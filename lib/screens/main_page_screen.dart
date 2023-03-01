@@ -71,6 +71,15 @@ class _MainPageState extends State<MainPage> {
             }
               }, icon: const Icon(Icons.person_outline))
         ],
+        leading: IconButton(onPressed: () {
+          if(currentUser!=null) {
+            Navigator.pushNamed(context, UserScreen.routeName,
+                arguments: currentUser);
+          }
+          else{
+            Navigator.pushNamed(context, SignInScreen.routeName);
+          }
+        }, icon: const Icon(Icons.search_outlined)),
       ),
       body: Visibility(
         visible: recipeUploaded,

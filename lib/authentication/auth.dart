@@ -26,8 +26,6 @@ class AuthService
         List<QueryDocumentSnapshot> documents = querySnapshot.docs;
         for (QueryDocumentSnapshot document in documents) {
           Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-          // recipesList.add(Recipe(document.id,data['name'], data['description'],
-          //     data['ingredients'], data['steps'], downloadUrl,false));
           if(data['userUID'] == user.uid)
             {
               name = data['name'];
