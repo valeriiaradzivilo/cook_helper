@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'user.dart';
@@ -12,16 +13,37 @@ class AuthService
   }
 
   // create user object based on firebase user
-  User_Fire? _userFromFirebaseUser(User? user)
+  Future<User_Fire?> _userFromFirebaseUser(User? user)async
   {
-    return user!=null? User_Fire(uid: user.uid, username: user.displayName):null;
+    String name;
+    List<dynamic> favouritesId;
+
+    if(user!=null)
+      {
+        final CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+        QuerySnapshot querySnapshot = await usersCollection.get();
+        List<QueryDocumentSnapshot> documents = querySnapshot.docs;
+        for (QueryDocumentSnapshot document in documents) {
+          Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+          // recipesList.add(Recipe(document.id,data['name'], data['description'],
+          //     data['ingredients'], data['steps'], downloadUrl,false));
+          if(data['userUID'] == user.uid)
+            {
+              name = data['name'];
+              favouritesId = data['favouritesId'];
+              return User_Fire(username: name, uid: user.uid, favouritesId: favouritesId);
+            }
+        }
+      }
+    return null;
   }
 
 
   //auth change user stream
   Stream<User_Fire?> get user{
     return _auth.authStateChanges()
-        .map(_userFromFirebaseUser);
+        .map(_userFromFirebaseUser as User_Fire? Function(User? event));
   }
 
   // sign in anon

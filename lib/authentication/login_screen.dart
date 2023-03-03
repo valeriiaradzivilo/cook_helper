@@ -1,3 +1,4 @@
+import 'package:cook_helper/authentication/user.dart';
 import 'package:cook_helper/screens/main_page_screen.dart';
 import 'package:cook_helper/widgets/form_field.dart';
 import 'package:flutter/material.dart';
@@ -7,33 +8,47 @@ import 'auth.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
+  static const routeName = '/signIn';
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  Color backColor = Color(0xFF9FB4E7);
+  Color backColor = const Color(0xFF9FB4E7);
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String error_message = '';
   final AuthService _auth = AuthService();
+  late var currentUser;
   @override
   Widget build(BuildContext context) {
+    if(ModalRoute.of(context)!.settings.arguments!=null)
+      {
+        setState(() {
+          currentUser = ModalRoute.of(context)!.settings.arguments as User_Fire;
+        });
+
+      }
+    else{
+      setState(() {
+        currentUser=null;
+      });
+    }
     return Scaffold(
       backgroundColor: backColor,
       appBar: AppBar(
         backgroundColor: backColor,
         elevation: 0.2,
         centerTitle: true,
-        title: Text("CookBook Helper"),
+        title: const Text("CookBook Helper"),
       ),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
@@ -85,17 +100,18 @@ class _SignInScreenState extends State<SignInScreen> {
                                     "Could not sign with these credentials \nTry checking spelling";
                               });
                             } else {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const MainPage()));
+                                Navigator.pushNamed(context, MainPage.routeName,
+                                    arguments: result);
+
                             }
                           } else {
                             print("You didn't fill all required fields");
                           }
                         },
-                        icon: Icon(Icons.follow_the_signs_sharp),
-                        label: Text("Sign in"),
+                        icon: const Icon(Icons.follow_the_signs_sharp),
+                        label: const Text("Sign in"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFCB7A80),
+                          backgroundColor: const Color(0xFFCB7A80),
                         ),
                       ),
                     ),

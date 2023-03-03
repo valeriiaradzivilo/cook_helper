@@ -1,5 +1,8 @@
 import 'package:cook_helper/additional_classes/color_palette.dart';
+import 'package:cook_helper/authentication/login_screen.dart';
+import 'package:cook_helper/authentication/user.dart';
 import 'package:cook_helper/recipes_work/getRecipes.dart';
+import 'package:cook_helper/screens/user_screen.dart';
 import 'package:cook_helper/widgets/small_recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -9,17 +12,20 @@ import '../recipes_work/recipe.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
+  static const routeName = '/';
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
+
   ColorPalette colorPalette = ColorPalette();
   int currentIndex = 0;
   List<Recipe> recipesList = [];
   RecipesList recipeDatabaseWork = RecipesList();
   bool recipeUploaded = false;
+  late var currentUser;
   Future<void> recipeGetter() async {
     AuthService authService = AuthService();
     await authService.signInAnon();
@@ -37,6 +43,16 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    if(ModalRoute.of(context)!.settings.arguments!=null) {
+      setState(() {
+        currentUser = ModalRoute.of(context)!.settings.arguments as User_Fire;
+      });
+    }
+    else{
+      setState(() {
+        currentUser = null;
+      });
+    }
     return Scaffold(
       backgroundColor: colorPalette.lightBlue,
       appBar: AppBar(
@@ -45,7 +61,15 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: colorPalette.lightBlue,
         elevation: 0.2,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.person_outline))
+          IconButton(onPressed: () {
+            if(currentUser!=null) {
+                  Navigator.pushNamed(context, UserScreen.routeName,
+                      arguments: currentUser);
+                }
+            else{
+              Navigator.pushNamed(context, SignInScreen.routeName);
+            }
+              }, icon: const Icon(Icons.person_outline))
         ],
       ),
       body: Visibility(

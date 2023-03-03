@@ -2,6 +2,7 @@ import 'package:cook_helper/authentication/login_screen.dart';
 import 'package:cook_helper/screens/create_recipe_screen.dart';
 import 'package:cook_helper/screens/main_page_screen.dart';
 import 'package:cook_helper/screens/open_recipe_screen.dart';
+import 'package:cook_helper/screens/user_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -39,8 +40,11 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.lightBlue,
           ),
         routes: {
-            '/':(context) => const CreateRecipeScreen(),
+            '/':(context) => const MainPage(),
+            '/signIn':(context) => const SignInScreen(),
             '/openRecipe':(context)=>const OpenRecipeScreen(),
+            '/createRecipe':(context)=>const CreateRecipeScreen(),
+            '/selectUser':(context)=> const UserScreen(),
         },
         );
     }
