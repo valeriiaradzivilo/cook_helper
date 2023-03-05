@@ -29,7 +29,7 @@ class _SmallRecipeState extends State<SmallRecipe> {
         padding: const EdgeInsets.all(20.0),
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          MainText(text: widget.recipe.name),
+          MainText(text: widget.recipe.name,sizePercent: 100,),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(

@@ -1,3 +1,5 @@
+import 'package:cook_helper/additional_classes/color_palette.dart';
+import 'package:cook_helper/authentication/sign_up_screen.dart';
 import 'package:cook_helper/authentication/user.dart';
 import 'package:cook_helper/screens/main_page_screen.dart';
 import 'package:cook_helper/widgets/form_field.dart';
@@ -15,7 +17,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  Color backColor = const Color(0xFF9FB4E7);
+  ColorPalette colorPalette = ColorPalette();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -37,9 +39,9 @@ class _SignInScreenState extends State<SignInScreen> {
       });
     }
     return Scaffold(
-      backgroundColor: backColor,
+      backgroundColor: colorPalette.lightBlue,
       appBar: AppBar(
-        backgroundColor: backColor,
+        backgroundColor: colorPalette.lightBlue,
         elevation: 0.2,
         centerTitle: true,
         title: const Text("CookBook Helper"),
@@ -111,11 +113,18 @@ class _SignInScreenState extends State<SignInScreen> {
                         icon: const Icon(Icons.follow_the_signs_sharp),
                         label: const Text("Sign in"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFCB7A80),
+                          backgroundColor: colorPalette.lightOrange,
                         ),
                       ),
                     ),
                     const SizedBox(),
+                    TextButton(onPressed: (){
+                      Navigator.pushNamed(context, SignUpScreen.routeName,);
+                    }, child: Text("Tap here to sign up if you are new user",
+                    style: TextStyle(color: colorPalette.bordo,fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                      decoration: TextDecoration.underline,),
+                    textAlign: TextAlign.center,))
                   ],
                 ),
               ),

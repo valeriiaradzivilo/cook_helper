@@ -95,7 +95,7 @@ class _MainPageState extends State<MainPage> {
                 Container(
                   width: 10.w,
                   height: 60.h,
-                  color: colorPalette.lightWhite,
+                  color: colorPalette.lightOrange,
                 ),
                 recipeUploaded
                     ? Dismissible(

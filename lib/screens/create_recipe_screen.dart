@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:cook_helper/additional_classes/color_palette.dart';
+import 'package:cook_helper/authentication/user.dart';
 import 'package:cook_helper/widgets/image_picker.dart';
 import 'package:cook_helper/widgets/text_widgets/decription_text.dart';
 import 'package:flutter/material.dart';
@@ -26,18 +25,11 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   List<TextEditingController> ingredientsAmountControllers = [];
   ColorPalette colorPalette = ColorPalette();
 
-  String generateRandomId() {
-    var r = Random();
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    String charsList =
-        List.generate(10, (index) => _chars[r.nextInt(_chars.length)]).join();
-    return '${DateTime.now().millisecondsSinceEpoch}$charsList';
-  }
+
 
   @override
   void initState() {
-    currentRecipe.id = generateRandomId();
+    currentRecipe.id = User_Fire.generateRandomId();
     super.initState();
   }
 
@@ -90,7 +82,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
           child: SafeArea(
             child: Column(
               children: [
-                const MainText(text: "Create your personal recipe"),
+                const MainText(text: "Create your personal recipe",sizePercent: 100,),
                 const DescriptionText(text: "Name"),
                 TextFormField(
                   controller: nameController,

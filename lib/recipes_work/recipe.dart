@@ -24,6 +24,20 @@ class Recipe{
     isLiked = like;
   }
 
+  Future<void> addRecipeToFirestore() async {
+    // Get a reference to the Firestore collection where the recipe will be stored
+    CollectionReference recipesRef = FirebaseFirestore.instance.collection('recipes');
+
+    // Add the recipe data to the Firestore collection
+    await recipesRef.doc(id).set({
+      'name':name,
+      'description':description,
+      'ingredients':ingredients,
+      'steps':steps
+    });
+  }
+
+
 
   Future<String> uploadFileImageToFirebase(File imageFile) async {
     // Reference to the storage location where the image will be uploaded
@@ -39,19 +53,6 @@ class Recipe{
     this.imageUrl = imageUrl;
 
     return imageUrl;
-  }
-
-  Future<void> addRecipeToFirestore() async {
-    // Get a reference to the Firestore collection where the recipe will be stored
-    CollectionReference recipesRef = FirebaseFirestore.instance.collection('recipes');
-
-    // Add the recipe data to the Firestore collection
-    await recipesRef.doc(id).set({
-      'name':name,
-      'description':description,
-      'ingredients':ingredients,
-      'steps':steps
-    });
   }
 
   String toString()

@@ -38,6 +38,8 @@ class AuthService
   }
 
 
+
+
   //auth change user stream
   Stream<User_Fire?> get user{
     return _auth.authStateChanges()
@@ -62,11 +64,13 @@ class AuthService
 
 
   //register with email and password
-  Future registerWithEmailAndPassword(String email, String password)
+  Future registerWithEmailAndPassword(String email, String password, String username)
   async {
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
+      User_Fire newUser = User_Fire(username: username, uid: user!.uid, favouritesId: []);
+      newUser.addUserToFirestore(null);
       return _userFromFirebaseUser(user);
     }catch(e)
     {

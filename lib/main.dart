@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import 'authentication/firebase_options.dart';
+import 'authentication/sign_up_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
             '/openRecipe':(context)=>const OpenRecipeScreen(),
             '/createRecipe':(context)=>const CreateRecipeScreen(),
             '/selectUser':(context)=> const UserScreen(),
+            '/signUp':(context)=> const SignUpScreen(),
         },
         );
     }

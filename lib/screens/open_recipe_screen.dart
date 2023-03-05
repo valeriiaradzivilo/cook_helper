@@ -51,7 +51,7 @@ class _OpenRecipeScreenState extends State<OpenRecipeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MainText(text: currentRecipe.name),
+                    MainText(text: currentRecipe.name,sizePercent: 60,),
                     IconButton(
                       onPressed: () {
                         setState(() {
@@ -69,7 +69,7 @@ class _OpenRecipeScreenState extends State<OpenRecipeScreen> {
                   ],
                 ),
                 DescriptionText(text: currentRecipe.description),
-                const MainText(text: "Components:"),
+                const MainText(text: "Components:",sizePercent: 100,),
                 for (int i = 0; i < currentRecipe.ingredients.length; i++)
                   Row(
                     children: [
@@ -82,7 +82,7 @@ class _OpenRecipeScreenState extends State<OpenRecipeScreen> {
                           text: currentRecipe.ingredients.elementAt(i)['item']),
                     ],
                   ),
-                const MainText(text: "Recipe"),
+                const MainText(text: "Recipe",sizePercent: 100,),
                 for (int i = 0; i < currentRecipe.steps.length; i++)
                   RichText(
                     text: TextSpan(
