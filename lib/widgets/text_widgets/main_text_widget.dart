@@ -12,7 +12,7 @@ class MainText extends StatelessWidget {
           width: sizePercent.w,
           child: Text(
             text,
-            style: TextStyle(fontSize: 5.h - (text.length / 2)),
+            style: TextStyle(fontSize: 5.h - (text.length / 3)),
             textAlign: TextAlign.center,
             maxLines: 100,
             overflow: TextOverflow.ellipsis,

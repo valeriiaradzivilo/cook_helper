@@ -12,7 +12,7 @@ class SmallText extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               text,
-              maxLines: 5,
+              maxLines: 10,
               overflow: TextOverflow.ellipsis,
             ),
           ),

@@ -19,7 +19,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   ColorPalette colorPalette = ColorPalette();
   int currentIndex = 0;
   List<Recipe> recipesList = [];
@@ -43,12 +42,11 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(ModalRoute.of(context)!.settings.arguments!=null) {
+    if (ModalRoute.of(context)!.settings.arguments != null) {
       setState(() {
         currentUser = ModalRoute.of(context)!.settings.arguments as User_Fire;
       });
-    }
-    else{
+    } else {
       setState(() {
         currentUser = null;
       });
@@ -61,25 +59,27 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: colorPalette.lightBlue,
         elevation: 0.2,
         actions: [
-          IconButton(onPressed: () {
-            if(currentUser!=null) {
+          IconButton(
+              onPressed: () {
+                if (currentUser != null) {
                   Navigator.pushNamed(context, UserScreen.routeName,
                       arguments: currentUser);
+                } else {
+                  Navigator.pushNamed(context, SignInScreen.routeName);
                 }
-            else{
-              Navigator.pushNamed(context, SignInScreen.routeName);
-            }
-              }, icon: const Icon(Icons.person_outline))
+              },
+              icon: const Icon(Icons.person_outline))
         ],
-        leading: IconButton(onPressed: () {
-          if(currentUser!=null) {
-            Navigator.pushNamed(context, UserScreen.routeName,
-                arguments: currentUser);
-          }
-          else{
-            Navigator.pushNamed(context, SignInScreen.routeName);
-          }
-        }, icon: const Icon(Icons.search_outlined)),
+        leading: IconButton(
+            onPressed: () {
+              if (currentUser != null) {
+                Navigator.pushNamed(context, UserScreen.routeName,
+                    arguments: currentUser);
+              } else {
+                Navigator.pushNamed(context, SignInScreen.routeName);
+              }
+            },
+            icon: const Icon(Icons.search_outlined)),
       ),
       body: Visibility(
         visible: recipeUploaded,
@@ -92,45 +92,46 @@ class _MainPageState extends State<MainPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: 10.w,
-                  height: 60.h,
-                  color: colorPalette.lightOrange,
-                ),
-                recipeUploaded
-                    ? Dismissible(
-                        resizeDuration: const Duration(milliseconds: 10),
-                        onDismissed: (DismissDirection direction) {
-                          setState(() {
-                            if (currentIndex + 1 < recipesList.length &&
-                                (currentIndex - 1 >= 0)) {
-                              currentIndex +=
-                                  direction == DismissDirection.endToStart
-                                      ? 1
-                                      : -1;
-                            } else if (currentIndex == 0) {
-                              direction == DismissDirection.endToStart
-                                  ? currentIndex += 1
-                                  : currentIndex += recipesList.length - 1;
-                            } else if (currentIndex == recipesList.length - 1) {
-                              direction == DismissDirection.endToStart
-                                  ? currentIndex += -recipesList.length + 1
-                                  : currentIndex -= 1;
-                            }
-                          });
-                        },
-                        key: ValueKey(currentIndex),
-                        child: SmallRecipe(
+              Container(
+              color: colorPalette.lightOrange,
+              width: 10.w,
+              height: 60.h,
+            ),
+              recipeUploaded
+                ? Dismissible(
+                    resizeDuration: const Duration(milliseconds: 10),
+                    onDismissed: (DismissDirection direction) {
+                      setState(() {
+                        if (currentIndex + 1 < recipesList.length &&
+                            (currentIndex - 1 >= 0)) {
+                          currentIndex +=
+                              direction == DismissDirection.endToStart ? 1 : -1;
+                        } else if (currentIndex == 0) {
+                          direction == DismissDirection.endToStart
+                              ? currentIndex += 1
+                              : currentIndex += recipesList.length - 1;
+                        } else if (currentIndex == recipesList.length - 1) {
+                          direction == DismissDirection.endToStart
+                              ? currentIndex += -recipesList.length + 1
+                              : currentIndex -= 1;
+                        }
+                      });
+                    },
+                    key: ValueKey(currentIndex),
+                    child:
+                        SmallRecipe(
                           recipe: recipesList.elementAt(currentIndex),
-                        ))
-                    : const SizedBox(),
+                        ),
+
+                    ): const SizedBox(),
                 Container(
+                  color: colorPalette.lightOrange,
                   width: 10.w,
                   height: 60.h,
-                  color: colorPalette.lightOrange,
                 ),
               ],
-            ),
+          )
+
           ),
         ),
       ),
