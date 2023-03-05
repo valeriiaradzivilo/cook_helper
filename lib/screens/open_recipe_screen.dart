@@ -43,10 +43,10 @@ class _OpenRecipeScreenState extends State<OpenRecipeScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                    alignment: Alignment.center,
-                    height: 50.h,
-                    child: Image.network(currentRecipe.imageUrl)),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Image.memory(currentRecipe.imageUrl),
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

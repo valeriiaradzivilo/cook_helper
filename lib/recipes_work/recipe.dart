@@ -1,6 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+
+import 'getRecipes.dart';
 
 class Recipe{
   String id;
@@ -50,7 +54,7 @@ class Recipe{
 
     // Get the URL of the uploaded image
     String imageUrl = await taskSnapshot.ref.getDownloadURL();
-    this.imageUrl = imageUrl;
+    this.imageUrl = await RecipesList.resizeImage(imageUrl);
 
     return imageUrl;
   }

@@ -5,6 +5,7 @@ import 'package:cook_helper/recipes_work/getRecipes.dart';
 import 'package:cook_helper/screens/user_screen.dart';
 import 'package:cook_helper/widgets/small_recipe.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../authentication/auth.dart';
@@ -83,8 +84,12 @@ class _MainPageState extends State<MainPage> {
       ),
       body: Visibility(
         visible: recipeUploaded,
-        replacement: const Align(
-            alignment: Alignment.center, child: CircularProgressIndicator()),
+        replacement: Align(
+            alignment: Alignment.center, child: LoadingAnimationWidget.flickr(
+          leftDotColor: const Color(0xFF0063DC),
+          rightDotColor: const Color(0xFFFF0084),
+          size: 70,
+        ),),
         child: SafeArea(
           child: Align(
             alignment: Alignment.center,

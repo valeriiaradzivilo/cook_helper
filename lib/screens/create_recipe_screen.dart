@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cook_helper/additional_classes/color_palette.dart';
 import 'package:cook_helper/authentication/user.dart';
 import 'package:cook_helper/widgets/image_picker.dart';

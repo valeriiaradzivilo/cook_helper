@@ -6,16 +6,14 @@ class SmallText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Expanded(
-          child: Padding(
+    return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               text,
               maxLines: 10,
               overflow: TextOverflow.ellipsis,
             ),
-          ),
+
     );
   }
 }
