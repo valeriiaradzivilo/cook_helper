@@ -8,14 +8,15 @@ class MainText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: sizePercent.w,
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 5.h - (text.length / 3)),
-          textAlign: TextAlign.center,
-          maxLines: 100,
-        ),
+    return  SizedBox(
+          width: sizePercent.w,
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 5.h - (text.length / 2)),
+            textAlign: TextAlign.center,
+            maxLines: 100,
+            overflow: TextOverflow.ellipsis,
+          ),
 
     );
   }

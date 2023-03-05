@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:http/http.dart' as http;
 import 'package:cook_helper/additional_classes/color_palette.dart';
 import 'package:cook_helper/screens/open_recipe_screen.dart';
 import 'package:cook_helper/widgets/text_widgets/SmallText.dart';
 import 'package:cook_helper/widgets/text_widgets/main_text_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../recipes_work/recipe.dart';
@@ -18,10 +22,40 @@ class SmallRecipe extends StatefulWidget {
 
 class _SmallRecipeState extends State<SmallRecipe> {
   ColorPalette colorPalette = ColorPalette();
+
+  Uint8List? targetlUinit8List;
+  late Uint8List originalUnit8List;
+  @override
+  void initState() {
+    _resizeImage();
+    super.initState();
+  }
+
+  void _resizeImage() async {
+    String imageUrl = widget.recipe.imageUrl;
+    http.Response response = await http.get(Uri.parse(imageUrl));
+    originalUnit8List = response.bodyBytes;
+    var codec = await ui.instantiateImageCodec(originalUnit8List);
+    var frameInfo = await codec.getNextFrame();
+    int width = frameInfo.image.width;
+    int height = frameInfo.image.height;
+    print('Image width: $width, height: $height');
+    var codecNew = await ui.instantiateImageCodec(originalUnit8List,
+        targetHeight: (40.h).toInt());
+    var frameInfoNew = await codecNew.getNextFrame();
+    ui.Image targetUiImage = frameInfoNew.image;
+    ByteData? targetByteData =
+        await targetUiImage.toByteData(format: ui.ImageByteFormat.png);
+
+    setState(() {
+      targetlUinit8List = targetByteData!.buffer.asUint8List();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       height: 70.h,
       width: 70.w,
       color: colorPalette.lightWhite,
@@ -29,13 +63,23 @@ class _SmallRecipeState extends State<SmallRecipe> {
         padding: const EdgeInsets.all(20.0),
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          MainText(text: widget.recipe.name,sizePercent: 100,),
+          SizedBox(
+            height: 10.h,
+            child: MainText(
+              text: widget.recipe.name,
+              sizePercent: 100,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
               height: 30.h,
-              child: Image.network(
-                widget.recipe.imageUrl,
+              child: targetlUinit8List != null
+                  ? Image.memory(targetlUinit8List!)
+                  : LoadingAnimationWidget.flickr(
+                leftDotColor: const Color(0xFF0063DC),
+                rightDotColor: const Color(0xFFFF0084),
+                size: 70,
               ),
             ),
           ),
