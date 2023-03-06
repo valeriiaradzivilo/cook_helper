@@ -7,9 +7,10 @@ class User_Fire
   final String uid;
   final String? username;
   final List<dynamic>? favouritesId;
+  final bool isCreator;
   CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
 
-  User_Fire( {required this.username, required this.uid, required this.favouritesId});
+  User_Fire({required this.username, required this.uid, required this.favouritesId, required this.isCreator,});
 
   static String generateRandomId() {
     var r = Random();
@@ -32,8 +33,15 @@ class User_Fire
     await usersRef.doc(id).set({
       'name': username,
       'userUID':uid,
-      'favouritesId': []
+      'favouritesId': [],
+      'isCreator': isCreator,
     });
+  }
+
+  @override
+  String toString()
+  {
+    return "Name: $username UID: $uid Favourites length: ${favouritesId!=null?favouritesId?.length:0}";
   }
 
 

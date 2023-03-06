@@ -4,9 +4,6 @@ import 'package:cook_helper/widgets/text_widgets/main_text_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:sizer/sizer.dart';
-
-import '../widgets/text_widgets/SmallText.dart';
 
 class OpenRecipeScreen extends StatefulWidget {
   const OpenRecipeScreen({Key? key}) : super(key: key);
@@ -16,8 +13,7 @@ class OpenRecipeScreen extends StatefulWidget {
 }
 
 class _OpenRecipeScreenState extends State<OpenRecipeScreen> {
-  double _userRating = 3;
-  IconData? _selectedIcon;
+
   @override
   Widget build(BuildContext context) {
     final currentRecipe = ModalRoute.of(context)!.settings.arguments as Recipe;

@@ -52,10 +52,13 @@ class RecipesList {
   }
 
 
-  Future<List<Recipe>> getRecipesUser(List<dynamic> favouritesId) async {
-
-
-    recipesList.clear();
+  static Future<List<Recipe>> getRecipesUser(List<dynamic> favouritesId) async {
+    List<Recipe> recipesList = [];
+    List <String> newFavourites = [];
+    for(var i in favouritesId)
+      {
+        newFavourites.add(i.toString());
+      }
     final CollectionReference usersCollection =
     FirebaseFirestore.instance.collection('recipes');
     QuerySnapshot querySnapshot = await usersCollection.get();
@@ -64,7 +67,8 @@ class RecipesList {
     final storage = FirebaseStorage.instance;
 
     for (QueryDocumentSnapshot document in documents) {
-      if(favouritesId.contains(document.id)) {
+      if(newFavourites.contains(document.id.toString())) {
+        print("gotta favourite recipe");
         Map<String, dynamic> data = document.data() as Map<String, dynamic>;
         // Get a reference to the image file in Firebase Storage
         final imageRef =
@@ -78,4 +82,17 @@ class RecipesList {
     }
     return recipesList;
   }
+
+  static bool checkIfListContains(String valueToCheck, List<String> list)
+  {
+    for(String i in list)
+      {
+        if(i==valueToCheck)
+          {
+            return true;
+          }
+      }
+    return false;
+  }
+
 }

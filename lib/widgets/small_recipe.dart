@@ -42,21 +42,22 @@ class _SmallRecipeState extends State<SmallRecipe> {
       child: ListView(
           padding: const EdgeInsets.all(20),
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: targetlUinit8List != null
+                  ? Image.memory(targetlUinit8List!)
+                  : LoadingAnimationWidget.flickr(
+                leftDotColor: const Color(0xFF0063DC),
+                rightDotColor: const Color(0xFFFF0084),
+                size: 70,
+              ),
+            ),
 
                 MainText(
                         text: widget.recipe.name,
                         sizePercent: 100,
                       ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: targetlUinit8List != null
-                            ? Image.memory(targetlUinit8List!)
-                            : LoadingAnimationWidget.flickr(
-                          leftDotColor: const Color(0xFF0063DC),
-                          rightDotColor: const Color(0xFFFF0084),
-                          size: 70,
-                        ),
-                    ),
+
                     SmallText(text: widget.recipe.description),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

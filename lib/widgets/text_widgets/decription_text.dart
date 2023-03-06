@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:sizer/sizer.dart';
 
 class DescriptionText extends StatelessWidget {
   const DescriptionText({Key? key, required this.text}) : super(key: key);
@@ -10,7 +11,7 @@ class DescriptionText extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
           ),
         ),

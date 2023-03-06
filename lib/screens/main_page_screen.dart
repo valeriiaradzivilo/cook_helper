@@ -52,6 +52,7 @@ class _MainPageState extends State<MainPage> {
         currentUser = null;
       });
     }
+    print("Current user: ${currentUser.toString()}");
     return Scaffold(
       backgroundColor: colorPalette.lightBlue,
       appBar: AppBar(
@@ -85,59 +86,61 @@ class _MainPageState extends State<MainPage> {
       body: Visibility(
         visible: recipeUploaded,
         replacement: Align(
-            alignment: Alignment.center, child: LoadingAnimationWidget.flickr(
-          leftDotColor: const Color(0xFF0063DC),
-          rightDotColor: const Color(0xFFFF0084),
-          size: 70,
-        ),),
+          alignment: Alignment.center,
+          child: LoadingAnimationWidget.flickr(
+            leftDotColor: const Color(0xFF0063DC),
+            rightDotColor: const Color(0xFFFF0084),
+            size: 70,
+          ),
+        ),
         child: SafeArea(
           child: Align(
-            alignment: Alignment.center,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-              Container(
-              color: colorPalette.lightOrange,
-              width: 10.w,
-              height: 60.h,
-            ),
-              recipeUploaded
-                ? Dismissible(
-                    resizeDuration: const Duration(milliseconds: 10),
-                    onDismissed: (DismissDirection direction) {
-                      setState(() {
-                        if (currentIndex + 1 < recipesList.length &&
-                            (currentIndex - 1 >= 0)) {
-                          currentIndex +=
-                              direction == DismissDirection.endToStart ? 1 : -1;
-                        } else if (currentIndex == 0) {
-                          direction == DismissDirection.endToStart
-                              ? currentIndex += 1
-                              : currentIndex += recipesList.length - 1;
-                        } else if (currentIndex == recipesList.length - 1) {
-                          direction == DismissDirection.endToStart
-                              ? currentIndex += -recipesList.length + 1
-                              : currentIndex -= 1;
-                        }
-                      });
-                    },
-                    key: ValueKey(currentIndex),
-                    child:
-                        SmallRecipe(
-                          recipe: recipesList.elementAt(currentIndex),
-                        ),
-
-                    ): const SizedBox(),
-                Container(
-                  color: colorPalette.lightOrange,
-                  width: 10.w,
-                  height: 60.h,
-                ),
-              ],
-          )
-
-          ),
+              alignment: Alignment.center,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    color: colorPalette.lightOrange,
+                    width: 10.w,
+                    height: 60.h,
+                  ),
+                  recipeUploaded
+                      ? Dismissible(
+                          resizeDuration: const Duration(milliseconds: 10),
+                          onDismissed: (DismissDirection direction) {
+                            setState(() {
+                              if (currentIndex + 1 < recipesList.length &&
+                                  (currentIndex - 1 >= 0)) {
+                                currentIndex +=
+                                    direction == DismissDirection.endToStart
+                                        ? 1
+                                        : -1;
+                              } else if (currentIndex == 0) {
+                                direction == DismissDirection.endToStart
+                                    ? currentIndex += 1
+                                    : currentIndex += recipesList.length - 1;
+                              } else if (currentIndex ==
+                                  recipesList.length - 1) {
+                                direction == DismissDirection.endToStart
+                                    ? currentIndex += -recipesList.length + 1
+                                    : currentIndex -= 1;
+                              }
+                            });
+                          },
+                          key: ValueKey(currentIndex),
+                          child: SmallRecipe(
+                            recipe: recipesList.elementAt(currentIndex)
+                          ),
+                        )
+                      : const SizedBox(),
+                  Container(
+                    color: colorPalette.lightOrange,
+                    width: 10.w,
+                    height: 60.h,
+                  ),
+                ],
+              )),
         ),
       ),
     );
