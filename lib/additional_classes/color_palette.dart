@@ -5,6 +5,8 @@ class ColorPalette{
   final Color lightOrange = const Color(0xFFD0AB9C);
   final Color lightWhite = const Color(0xFFFEF5EF);
   final Color bordo = const Color(0xFF9D5C63);
+  final Color darkBlue = const Color(0xFF0063DC);
+  final Color pink = const Color(0xFFFF0084);
 
 
 

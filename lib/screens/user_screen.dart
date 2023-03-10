@@ -25,6 +25,7 @@ class _UserScreenState extends State<UserScreen> {
   User_Fire? currentUser;
   List<Recipe>? UsersRecipes;
   bool gotRecipes = false;
+  String warningLoadingText = "";
 
   @override
   void initState() {
@@ -81,15 +82,24 @@ class _UserScreenState extends State<UserScreen> {
                           : Icons.arrow_drop_up)),
                 ],
               ),
-              if (UsersRecipes == null && gotRecipes == true)
-                const CircularProgressIndicator(),
-              if (UsersRecipes != null && gotRecipes == true)
+              if(gotRecipes==true && UsersRecipes!.isEmpty)
+                const DescriptionText(text:"There are no favourites yet. Go to main screen and find what you like.",),
+              if (gotRecipes == true)
                 for (int i = 0; i < UsersRecipes!.length; i++)
                   Container(
                       width: 100.w,
                       height: 20.h,
                       child:
                           FavouriteRecipe(recipe: UsersRecipes!.elementAt(i))),
+              currentUser!.isCreator
+                  ? ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorPalette.pink
+                      ),
+                      onPressed: () {},
+                      icon: Icon(Icons.add_box_outlined),
+                      label: Text("Add new recipe to catalog"))
+                  : SizedBox(),
             ],
           ),
         ),

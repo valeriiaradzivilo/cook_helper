@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:cook_helper/recipes_work/recipe.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:ui' as ui;
 import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
@@ -33,6 +32,43 @@ class RecipesList {
           data['ingredients'], data['steps'], imageToRecipe,false));
     }
     return recipesList;
+  }
+
+  Future<List<Recipe>> getThreeRecipes(int position) async {
+    final CollectionReference usersCollection =
+    FirebaseFirestore.instance.collection('recipes');
+    QuerySnapshot querySnapshot = await usersCollection.get();
+    List<QueryDocumentSnapshot> documents = querySnapshot.docs;
+    // Get a reference to the Firebase Storage service
+    final storage = FirebaseStorage.instance;
+
+    int till = documents.length;
+
+    for(int i =0; i<3;i++)
+      {
+        if(position+i>=till)
+          {
+            position = 0;
+          }
+        else
+          {
+            position+=i;
+          }
+
+        QueryDocumentSnapshot ourDoc = documents.elementAt(position);
+        Map<String, dynamic> data = ourDoc.data() as Map<String, dynamic>;
+
+        final imageRef = storage.ref().child('recipe_pictures/${ourDoc.id}.jpg');
+        // Get the download URL of the image file
+        final downloadUrl = await imageRef.getDownloadURL();
+        Uint8List imageToRecipe = await RecipesList.resizeImage(downloadUrl);
+
+        Recipe newRecipe = Recipe(ourDoc.id, data['name'], data['description'], data['ingredients'], data['steps'], imageToRecipe,false);
+        recipesList.add(newRecipe);
+      }
+
+    return recipesList;
+
   }
 
   static Future<Uint8List> resizeImage(ImageUrl) async {

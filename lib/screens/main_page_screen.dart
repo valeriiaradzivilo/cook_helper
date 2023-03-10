@@ -3,9 +3,9 @@ import 'package:cook_helper/authentication/login_screen.dart';
 import 'package:cook_helper/authentication/user.dart';
 import 'package:cook_helper/recipes_work/getRecipes.dart';
 import 'package:cook_helper/screens/user_screen.dart';
+import 'package:cook_helper/widgets/loading_widget.dart';
 import 'package:cook_helper/widgets/small_recipe.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../authentication/auth.dart';
@@ -24,20 +24,34 @@ class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
   List<Recipe> recipesList = [];
   RecipesList recipeDatabaseWork = RecipesList();
-  bool recipeUploaded = false;
   late var currentUser;
-  Future<void> recipeGetter() async {
-    AuthService authService = AuthService();
-    await authService.signInAnon();
-    recipesList = await recipeDatabaseWork.getRecipes();
-    setState(() {
-      recipeUploaded = true;
-    });
+  bool isLoaded = false;
+  int biggestIndex=0;
+
+
+  Future<List<Recipe>> recipeGetter(int position) async {
+    print("Position $position");
+    print("Biggest index $biggestIndex");
+    if(position>=
+        biggestIndex-3) {
+      recipesList = await recipeDatabaseWork.getThreeRecipes(position).whenComplete(() => isLoaded = true);
+      biggestIndex += 3;
+    }
+    else
+      {
+        isLoaded = true;
+      }
+    return recipesList;
   }
+
+  Future<void> signInAn() async{
+  AuthService authService = AuthService();
+  await authService.signInAnon();
+}
 
   @override
   void initState() {
-    recipeGetter();
+    signInAn();
     super.initState();
   }
 
@@ -52,16 +66,26 @@ class _MainPageState extends State<MainPage> {
         currentUser = null;
       });
     }
-    print("Current user: ${currentUser.toString()}");
     return Scaffold(
-      backgroundColor: colorPalette.lightBlue,
-      appBar: AppBar(
-        title: const Text("Cookbook Helper"),
-        centerTitle: true,
         backgroundColor: colorPalette.lightBlue,
-        elevation: 0.2,
-        actions: [
-          IconButton(
+        appBar: AppBar(
+          title: const Text("Cookbook Helper"),
+          centerTitle: true,
+          backgroundColor: colorPalette.lightBlue,
+          elevation: 0.2,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  if (currentUser != null) {
+                    Navigator.pushNamed(context, UserScreen.routeName,
+                        arguments: currentUser);
+                  } else {
+                    Navigator.pushNamed(context, SignInScreen.routeName);
+                  }
+                },
+                icon: const Icon(Icons.person_outline))
+          ],
+          leading: IconButton(
               onPressed: () {
                 if (currentUser != null) {
                   Navigator.pushNamed(context, UserScreen.routeName,
@@ -70,79 +94,75 @@ class _MainPageState extends State<MainPage> {
                   Navigator.pushNamed(context, SignInScreen.routeName);
                 }
               },
-              icon: const Icon(Icons.person_outline))
-        ],
-        leading: IconButton(
-            onPressed: () {
-              if (currentUser != null) {
-                Navigator.pushNamed(context, UserScreen.routeName,
-                    arguments: currentUser);
-              } else {
-                Navigator.pushNamed(context, SignInScreen.routeName);
-              }
-            },
-            icon: const Icon(Icons.search_outlined)),
-      ),
-      body: Visibility(
-        visible: recipeUploaded,
-        replacement: Align(
-          alignment: Alignment.center,
-          child: LoadingAnimationWidget.flickr(
-            leftDotColor: const Color(0xFF0063DC),
-            rightDotColor: const Color(0xFFFF0084),
-            size: 70,
-          ),
+              icon: const Icon(Icons.search_outlined)),
         ),
-        child: SafeArea(
-          child: Align(
-              alignment: Alignment.center,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    color: colorPalette.lightOrange,
-                    width: 10.w,
-                    height: 60.h,
-                  ),
-                  recipeUploaded
-                      ? Dismissible(
-                          resizeDuration: const Duration(milliseconds: 10),
-                          onDismissed: (DismissDirection direction) {
-                            setState(() {
-                              if (currentIndex + 1 < recipesList.length &&
-                                  (currentIndex - 1 >= 0)) {
-                                currentIndex +=
-                                    direction == DismissDirection.endToStart
-                                        ? 1
-                                        : -1;
-                              } else if (currentIndex == 0) {
-                                direction == DismissDirection.endToStart
-                                    ? currentIndex += 1
-                                    : currentIndex += recipesList.length - 1;
-                              } else if (currentIndex ==
-                                  recipesList.length - 1) {
-                                direction == DismissDirection.endToStart
-                                    ? currentIndex += -recipesList.length + 1
-                                    : currentIndex -= 1;
-                              }
-                            });
-                          },
-                          key: ValueKey(currentIndex),
-                          child: SmallRecipe(
-                            recipe: recipesList.elementAt(currentIndex)
+        body: FutureBuilder<List<Recipe>>(
+          future: recipeGetter(currentIndex),
+          builder: (context, snapshot) {
+            if (snapshot.hasError && isLoaded) {
+              return const Center(
+                child: Text("ERROR"),
+              );
+            }
+            if (snapshot.hasData && isLoaded) {
+              return SafeArea(
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            color: colorPalette.lightOrange,
+                            width: 10.w,
+                            height: 60.h,
                           ),
-                        )
-                      : const SizedBox(),
-                  Container(
-                    color: colorPalette.lightOrange,
-                    width: 10.w,
-                    height: 60.h,
-                  ),
-                ],
-              )),
-        ),
-      ),
-    );
+                          Dismissible(
+                            resizeDuration: const Duration(milliseconds: 10),
+                            onDismissed: (DismissDirection direction) {
+                              setState(() {
+                                if (currentIndex != 0) {
+                                  currentIndex +=
+                                      direction == DismissDirection.endToStart
+                                          ? 1
+                                          : -1;
+                                }
+                                else{
+                                  currentIndex +=
+                                  direction == DismissDirection.endToStart
+                                      ? 1
+                                      : 1;
+                                }
+                                if(currentIndex>biggestIndex)
+                                  {
+                                    biggestIndex=currentIndex;
+                                  }
+                                if(currentIndex==recipesList.length-3)
+                                  {
+                                    recipeGetter(currentIndex);
+                                  }
+                                if(currentIndex==recipesList.length-1)
+                                  {
+                                    isLoaded = false;
+                                  }
+
+                              });
+                            },
+                            key: ValueKey(currentIndex),
+                            child: SmallRecipe(
+                                recipe: recipesList.elementAt(currentIndex)),
+                          ),
+                          Container(
+                            color: colorPalette.lightOrange,
+                            width: 10.w,
+                            height: 60.h,
+                          ),
+                        ],
+                      )));
+            } else {
+              return const LoadingWidget();
+            }
+          },
+        ));
   }
 }
