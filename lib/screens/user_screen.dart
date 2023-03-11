@@ -66,11 +66,16 @@ class _UserScreenState extends State<UserScreen> {
                   IconButton(
                       onPressed: () async {
                         if (gotRecipes == false) {
+                          setState(() {
+                            warningLoadingText = "It might take a while, please, wait ...";
+                          });
                           UsersRecipes = await RecipesList.getRecipesUser(
-                              currentUser!.favouritesId!);
+                              currentUser!.favouritesId!).whenComplete(() => warningLoadingText = " ");
+                         
                         } else {
                           setState(() {
                             UsersRecipes = null;
+                            warningLoadingText = " ";
                           });
                         }
                         setState(() {
@@ -82,6 +87,7 @@ class _UserScreenState extends State<UserScreen> {
                           : Icons.arrow_drop_up)),
                 ],
               ),
+              DescriptionText(text:warningLoadingText),
               if(gotRecipes==true && UsersRecipes!.isEmpty)
                 const DescriptionText(text:"There are no favourites yet. Go to main screen and find what you like.",),
               if (gotRecipes == true)
@@ -97,9 +103,9 @@ class _UserScreenState extends State<UserScreen> {
                         backgroundColor: colorPalette.pink
                       ),
                       onPressed: () {},
-                      icon: Icon(Icons.add_box_outlined),
-                      label: Text("Add new recipe to catalog"))
-                  : SizedBox(),
+                      icon: const Icon(Icons.add_box_outlined),
+                      label: const Text("Add new recipe to catalog"))
+                  : const SizedBox(),
             ],
           ),
         ),
