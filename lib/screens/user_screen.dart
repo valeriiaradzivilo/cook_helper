@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../recipes_work/recipe.dart';
+import 'create_recipe_screen.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({Key? key}) : super(key: key);
@@ -49,9 +50,9 @@ class _UserScreenState extends State<UserScreen> {
           child: ListView(
             children: <Widget>[
               Icon(
-                Icons.person_outlined,
+                Icons.accessibility_new_outlined,
                 size: 60,
-                color: colorPalette.bordo,
+                color: currentUser!.isCreator?colorPalette.pink:colorPalette.darkBlue,
               ),
               MainText(
                 text: currentUser!.username!,
@@ -102,7 +103,10 @@ class _UserScreenState extends State<UserScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: colorPalette.pink
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, CreateRecipeScreen.routeName,
+                            arguments: currentUser);
+                      },
                       icon: const Icon(Icons.add_box_outlined),
                       label: const Text("Add new recipe to catalog"))
                   : const SizedBox(),

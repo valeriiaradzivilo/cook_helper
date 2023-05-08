@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cook_helper/additional_classes/color_palette.dart';
 import 'package:cook_helper/authentication/user.dart';
+import 'package:cook_helper/screens/main_page_screen.dart';
 import 'package:cook_helper/widgets/image_picker.dart';
 import 'package:cook_helper/widgets/text_widgets/decription_text.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import '../widgets/text_widgets/main_text_widget.dart';
 
 class CreateRecipeScreen extends StatefulWidget {
   const CreateRecipeScreen({Key? key}) : super(key: key);
+  static const routeName = '/createRecipe';
 
   @override
   State<CreateRecipeScreen> createState() => _CreateRecipeScreenState();
@@ -26,6 +28,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
   List<TextEditingController> ingredientsControllers = [];
   List<TextEditingController> ingredientsAmountControllers = [];
   ColorPalette colorPalette = ColorPalette();
+  User_Fire? currentUser;
+
 
 
 
@@ -76,6 +80,7 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    currentUser = ModalRoute.of(context)!.settings.arguments as User_Fire;
     return Scaffold(
       backgroundColor: const Color(0xFF9FB4E7),
       body: Padding(
@@ -192,6 +197,8 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                           currentRecipe.uploadFileImageToFirebase(
                               currentRecipe.imageUrl);
                           currentRecipe.addRecipeToFirestore();
+                          Navigator.pushNamed(context, MainPage.routeName,
+                              arguments: currentUser);
                         });
                       } else {
                         print("You didn't fill all the fields");

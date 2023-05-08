@@ -30,6 +30,7 @@ class _MainPageState extends State<MainPage> {
 
 
   Future<List<Recipe>> recipeGetter(int position) async {
+    position+=1;
     print("Position $position");
     print("Biggest index $biggestIndex");
     if(position>=
